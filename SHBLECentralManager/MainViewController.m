@@ -64,7 +64,7 @@ NSString *const CellIdentifier = @"CellIdentifier";
 #pragma mark - Button action
 - (void)scanAction:(UIBarButtonItem *)sender
 {
-    [self.manager startScanPeripheralsWithCompletion:^(CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI, NSError *error) {
+    [self.manager startScanWithCompletion:^(CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI, NSError *error) {
         if (error) {
             NSLog(@"%@", [error localizedDescription]);
         } else {

@@ -33,7 +33,7 @@
 }
 
 #pragma mark - Public method
-- (void)startScanPeripheralsWithCompletion:(SHBLECentralManagerScanCompletion)completion
+- (void)startScanWithCompletion:(SHBLECentralManagerScanCompletion)completion
 {
     self.scanCompletion = completion;
     
