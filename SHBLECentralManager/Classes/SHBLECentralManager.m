@@ -11,7 +11,7 @@
 @interface SHBLECentralManager () <CBCentralManagerDelegate, CBPeripheralDelegate>
 
 @property (nonatomic, strong) CBCentralManager *centralManager;
-@property (nonatomic, strong) CBPeripheral *activePeripheral;
+@property (nonatomic, strong, readwrite) CBPeripheral *activePeripheral;
 @property (nonatomic, strong) NSArray *serviceUUIDs;
 @property (nonatomic, copy) SHBLECentralManagerScanCompletion scanCompletion;
 @property (nonatomic, copy) SHBLECentralManagerConnectCompletion connectCompletion;
@@ -33,8 +33,9 @@
 }
 
 #pragma mark - Public method
-- (void)startScanWithCompletion:(SHBLECentralManagerScanCompletion)completion
+- (void)startScanForPeripheralsWithServicesUUIDs:(NSArray *)serviceUUIDs completion:(SHBLECentralManagerScanCompletion)completion
 {
+    self.serviceUUIDs = serviceUUIDs;
     self.scanCompletion = completion;
     
     dispatch_queue_t bluetoothQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -74,7 +75,7 @@
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
     if (central.state == CBCentralManagerStatePoweredOn) {
-        [self.centralManager scanForPeripheralsWithServices:nil options:nil];
+        [self.centralManager scanForPeripheralsWithServices:self.serviceUUIDs options:nil];
     } else {
         // TODO: Error handling
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{

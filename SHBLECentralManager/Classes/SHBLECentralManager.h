@@ -23,7 +23,7 @@ typedef void (^SHBLECentralManagerDiscoverServicesCompletion) (NSArray *services
 
 @property (nonatomic, strong, readonly) CBPeripheral *activePeripheral;
 
-- (void)startScanWithCompletion:(SHBLECentralManagerScanCompletion)completion;
+- (void)startScanForPeripheralsWithServicesUUIDs:(NSArray *)serviceUUIDs completion:(SHBLECentralManagerScanCompletion)completion;
 - (void)stopScan;
 
 - (void)connectPeriperal:(CBPeripheral *)peripheral completion:(SHBLECentralManagerConnectCompletion)completion;
