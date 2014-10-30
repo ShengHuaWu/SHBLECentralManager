@@ -29,14 +29,16 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
 
 @implementation SHBLECentralManager
 
-#pragma mark - Designated initializer
-- (instancetype)init
+#pragma mark - Shared instance
++ (instancetype)sharedManager
 {
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
+    static SHBLECentralManager *instance = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        instance = [[SHBLECentralManager alloc] init];
+    });
+    return instance;
 }
 
 #pragma mark - Public method

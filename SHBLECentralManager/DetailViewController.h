@@ -7,10 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SHBLECentralManager.h"
 
 @interface DetailViewController : UIViewController
-
-@property (nonatomic, weak) SHBLECentralManager *maneger;
 
 @end

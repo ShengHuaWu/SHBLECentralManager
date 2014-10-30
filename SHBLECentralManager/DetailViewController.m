@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 #import "NSString+SHBLEToData.h"
+#import "SHBLECentralManager.h"
 
 NSString *const CharacteristicCellIdentifier = @"CharacteristicCellIdentifier";
 
@@ -15,6 +16,7 @@ NSString *const CharacteristicCellIdentifier = @"CharacteristicCellIdentifier";
 
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *discoverCharacheristics;
+@property (nonatomic, strong) SHBLECentralManager *maneger;
 
 @end
 
@@ -24,6 +26,8 @@ NSString *const CharacteristicCellIdentifier = @"CharacteristicCellIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.maneger = [SHBLECentralManager sharedManager];
     
     self.title = self.maneger.activePeripheral.name;
     

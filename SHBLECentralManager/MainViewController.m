@@ -34,7 +34,7 @@ NSString *const PeripherialCellIdentifier = @"PeripherialCellIdentifier";
     UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Scan" style:UIBarButtonItemStylePlain target:self action:@selector(scanAction:)];
     [self.navigationItem setRightBarButtonItem:rightButtonItem animated:YES];
     
-    self.manager = [[SHBLECentralManager alloc] init];
+    self.manager = [SHBLECentralManager sharedManager];
     self.discoverPeripherals = [NSMutableArray array];
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -103,7 +103,6 @@ NSString *const PeripherialCellIdentifier = @"PeripherialCellIdentifier";
             NSLog(@"%@", [error localizedDescription]);
         } else {
             DetailViewController *detailVC = [[DetailViewController alloc] init];
-            detailVC.maneger = self.manager;
             [self.navigationController pushViewController:detailVC animated:YES];
         }
     }];

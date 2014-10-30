@@ -32,6 +32,8 @@ typedef void (^SHBLECentralManagerWriteValueCompletion) (NSError *error);
 
 @property (nonatomic, strong, readonly) CBPeripheral *activePeripheral;
 
++ (instancetype)sharedManager;
+
 - (void)startScanForPeripheralsWithServicesUUIDs:(NSArray *)serviceUUIDs completion:(SHBLECentralManagerScanCompletion)completion;
 - (void)stopScan;
 
