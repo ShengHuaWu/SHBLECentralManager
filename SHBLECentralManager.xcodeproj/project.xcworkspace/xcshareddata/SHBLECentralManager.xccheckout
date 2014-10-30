@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0CA7526F-1599-4263-A27E-4CDD380929F9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SHBLECentralManager</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>40A7F397469AFFAAA5E6265BB7243DC3F7A0C1F6</key>
+		<string>github.com:ShengHuaWu/SHBLECentralManager.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>SHBLECentralManager.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>40A7F397469AFFAAA5E6265BB7243DC3F7A0C1F6</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:ShengHuaWu/SHBLECentralManager.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>40A7F397469AFFAAA5E6265BB7243DC3F7A0C1F6</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>40A7F397469AFFAAA5E6265BB7243DC3F7A0C1F6</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SHBLECentralManager</string>
+		</dict>
+	</array>
+</dict>
+</plist>
