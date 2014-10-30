@@ -8,15 +8,22 @@
 
 #import "SHBLECentralManager.h"
 
+NSString *const SHBLECentralManagerValueDidChangeNotification = @"SHBLECentralManagerValueDidChangeNotification";
+NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErrorNotification";
+
 @interface SHBLECentralManager () <CBCentralManagerDelegate, CBPeripheralDelegate>
 
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong, readwrite) CBPeripheral *activePeripheral;
 @property (nonatomic, strong) NSArray *serviceUUIDs;
+@property (nonatomic, strong) NSArray *characteristicUUIDs;
 @property (nonatomic, copy) SHBLECentralManagerScanCompletion scanCompletion;
 @property (nonatomic, copy) SHBLECentralManagerConnectCompletion connectCompletion;
 @property (nonatomic, copy) SHBLECentralManagerDisconnectCompletion disconnectionCompletion;
 @property (nonatomic, copy) SHBLECentralManagerDiscoverServicesCompletion discoverServicesCompletion;
+@property (nonatomic, copy) SHBLECentralManagerDiscoverCharacteristicsCompletion discoverCharacteristicsCompletion;
+@property (nonatomic, copy) SHBLECentralManagerReadValueForCharacteristicCompletion readValueForCharacteristicCompletion;
+@property (nonatomic, copy) SHBLECentralManagerWriteValueForCharacteristicCompletion writeValueForCharacteristicCompletion;
 
 @end
 
@@ -69,6 +76,42 @@
     self.discoverServicesCompletion = completion;
     
     [self.activePeripheral discoverServices:self.serviceUUIDs];
+}
+
+- (void)discoverCharacteristicsWithUUIDs:(NSArray *)characteristicUUIDs forService:(CBService *)service completion:(SHBLECentralManagerDiscoverCharacteristicsCompletion)completion
+{
+    self.characteristicUUIDs = characteristicUUIDs;
+    self.discoverCharacteristicsCompletion = completion;
+    
+    [self.activePeripheral discoverCharacteristics:self.characteristicUUIDs forService:service];
+}
+
+- (void)readValueForCharacteristic:(CBCharacteristic *)characteristic completion:(SHBLECentralManagerReadValueForCharacteristicCompletion)completion
+{
+    self.readValueForCharacteristicCompletion = completion;
+    
+    [self.activePeripheral readValueForCharacteristic:characteristic];
+}
+
+- (void)writeValue:(NSData *)value forCharacteristic:(CBCharacteristic *)characteristic completion:(SHBLECentralManagerWriteValueForCharacteristicCompletion)completion
+{
+    self.writeValueForCharacteristicCompletion = completion;
+    
+    [self.activePeripheral writeValue:value forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+}
+
+- (void)subscribeValueForCharacteristic:(CBCharacteristic *)characteristic
+{
+    if (!characteristic.isNotifying) {
+        [self.activePeripheral setNotifyValue:YES forCharacteristic:characteristic];
+    }
+}
+
+- (void)unsubscribeValueForCharacteric:(CBCharacteristic *)characteristic
+{
+    if (characteristic.isNotifying) {
+        [self.activePeripheral setNotifyValue:NO forCharacteristic:characteristic];
+    }
 }
 
 #pragma mark - Central manager delegate
@@ -131,16 +174,72 @@
         }];
     } else {
         NSMutableArray *services = [NSMutableArray array];
-        for (CBService *service in peripheral.services) {
-            if ([self.serviceUUIDs containsObject:service.UUID]) {
-                [services addObject:service];
+        if ([self.serviceUUIDs count]) {
+            for (CBService *service in peripheral.services) {
+                if ([self.serviceUUIDs containsObject:service.UUID]) {
+                    [services addObject:service];
+                }
             }
+        } else {
+            [services addObjectsFromArray:peripheral.services];
         }
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             if (self.discoverServicesCompletion) self.discoverServicesCompletion([services copy], nil);
         }];
     }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
+{
+    if (error) {
+        // TODO: Error handling
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (self.discoverCharacteristicsCompletion) self.discoverCharacteristicsCompletion(nil, error);
+        }];
+    } else {
+        NSMutableArray *characteristics = [NSMutableArray array];
+        if ([self.characteristicUUIDs count]) {
+            for (CBCharacteristic *characteristic in service.characteristics) {
+                if ([self.characteristicUUIDs containsObject:characteristic.UUID]) {
+                    [characteristics addObject:characteristic];
+                }
+            }
+        } else {
+            [characteristics addObjectsFromArray:service.characteristics];
+        }
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (self.discoverCharacteristicsCompletion) self.discoverCharacteristicsCompletion([characteristics copy], nil);
+        }];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
+{
+    if (characteristic.isNotifying) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (error) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:SHBLECentralManagerErrorNotification object:error];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:SHBLECentralManagerValueDidChangeNotification object:characteristic.value];
+            }
+        }];
+    } else {
+        // Read
+        // TODO: Error handling
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (self.readValueForCharacteristicCompletion) self.readValueForCharacteristicCompletion(characteristic.value, error);
+        }];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
+{
+    // TODO: Error handling
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        if (self.writeValueForCharacteristicCompletion) self.writeValueForCharacteristicCompletion(error);
+    }];
 }
 
 @end

@@ -10,7 +10,7 @@
 #import "SHBLECentralManager.h"
 #import "DetailViewController.h"
 
-NSString *const CellIdentifier = @"CellIdentifier";
+NSString *const PeripherialCellIdentifier = @"PeripherialCellIdentifier";
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -39,7 +39,7 @@ NSString *const CellIdentifier = @"CellIdentifier";
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     tableView.translatesAutoresizingMaskIntoConstraints = NO;
-    [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:PeripherialCellIdentifier];
     tableView.dataSource = self;
     tableView.delegate = self;
     [self.view addSubview:tableView];
@@ -82,7 +82,7 @@ NSString *const CellIdentifier = @"CellIdentifier";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PeripherialCellIdentifier forIndexPath:indexPath];
     
     CBPeripheral *peripheral = self.discoverPeripherals[indexPath.row];
     cell.textLabel.text = peripheral.name;

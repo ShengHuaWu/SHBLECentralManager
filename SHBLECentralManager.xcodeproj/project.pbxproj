@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A829311D1A020C1C00148D71 /* NSString+SHBLEToData.m in Sources */ = {isa = PBXBuildFile; fileRef = A829311C1A020C1C00148D71 /* NSString+SHBLEToData.m */; };
 		A8A118AC1A00B6A5004095F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A118AB1A00B6A5004095F7 /* main.m */; };
 		A8A118AF1A00B6A5004095F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A118AE1A00B6A5004095F7 /* AppDelegate.m */; };
 		A8A118B71A00B6A5004095F7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8A118B61A00B6A5004095F7 /* Images.xcassets */; };
@@ -27,6 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A829311B1A020C1C00148D71 /* NSString+SHBLEToData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+SHBLEToData.h"; path = "Classes/NSString+SHBLEToData.h"; sourceTree = "<group>"; };
+		A829311C1A020C1C00148D71 /* NSString+SHBLEToData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+SHBLEToData.m"; path = "Classes/NSString+SHBLEToData.m"; sourceTree = "<group>"; };
 		A8A118A61A00B6A5004095F7 /* SHBLECentralManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SHBLECentralManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8A118AA1A00B6A5004095F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A8A118AB1A00B6A5004095F7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -127,6 +130,8 @@
 			children = (
 				A8A118D21A00C307004095F7 /* SHBLECentralManager.h */,
 				A8A118D31A00C307004095F7 /* SHBLECentralManager.m */,
+				A829311B1A020C1C00148D71 /* NSString+SHBLEToData.h */,
+				A829311C1A020C1C00148D71 /* NSString+SHBLEToData.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -230,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8A118D81A00E297004095F7 /* DetailViewController.m in Sources */,
+				A829311D1A020C1C00148D71 /* NSString+SHBLEToData.m in Sources */,
 				A8A118AF1A00B6A5004095F7 /* AppDelegate.m in Sources */,
 				A8A118D11A00B738004095F7 /* MainViewController.m in Sources */,
 				A8A118D41A00C307004095F7 /* SHBLECentralManager.m in Sources */,
@@ -409,6 +415,7 @@
 				A8A118CB1A00B6A5004095F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A8A118CC1A00B6A5004095F7 /* Build configuration list for PBXNativeTarget "SHBLECentralManagerTests" */ = {
 			isa = XCConfigurationList;
@@ -417,6 +424,7 @@
 				A8A118CE1A00B6A5004095F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
