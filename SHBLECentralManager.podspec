@@ -1,9 +1,9 @@
 
 Pod::Spec.new do |s|
-  
+
   s.name         = "SHBLECentralManager"
   s.version      = "0.0.1"
-  s.summary      = "This project wraps a central manager of the Core BlueTooth framework."
+  s.summary      = "A BLE connection manager."
   s.description  = "This project wraps a central manager of the Core BlueTooth framework."
   s.homepage     = "https://github.com/ShengHuaWu/SHBLECentralManager"
   s.license      = { :type => "MIT", :file => "LICENSE" }
