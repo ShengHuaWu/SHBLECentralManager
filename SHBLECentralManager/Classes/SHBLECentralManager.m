@@ -57,6 +57,8 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
 
 - (void)connectPeriperal:(CBPeripheral *)peripheral completion:(SHBLECentralManagerConnectCompletion)completion
 {
+    if (peripheral.state != CBPeripheralStateDisconnected) return;
+    
     self.connectCompletion = completion;
     
     [self.centralManager connectPeripheral:peripheral options:nil];
@@ -64,6 +66,8 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
 
 - (void)disconnectPeripheral:(CBPeripheral *)peripheral completion:(SHBLECentralManagerDisconnectCompletion)completion
 {
+    if (peripheral.state != CBPeripheralStateConnected) return;
+    
     self.disconnectionCompletion = completion;
     
     [self.centralManager cancelPeripheralConnection:peripheral];
@@ -120,9 +124,8 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
     if (central.state == CBCentralManagerStatePoweredOn) {
         [self.centralManager scanForPeripheralsWithServices:self.serviceUUIDs options:nil];
     } else {
-        // TODO: Error handling
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            NSError *error = [NSError errorWithDomain:@"SHBLECentralManager" code:100 userInfo:@{NSLocalizedDescriptionKey: @"Cannot start to scan"}];
+            NSError *error = [NSError errorWithDomain:@"SHBLECentralManagerError" code:999 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Central manager state: %lu", (long unsigned)central.state]}];
             if (self.scanCompletion) self.scanCompletion(nil, nil, nil, error);
         }];
     }
@@ -147,7 +150,6 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    // TODO: Error handling
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         if (self.connectCompletion) self.connectCompletion(nil, error);
     }];
@@ -158,7 +160,6 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
     self.activePeripheral.delegate = nil;
     self.activePeripheral = nil;
     
-    // TODO: Error handling
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         if (self.disconnectionCompletion) self.disconnectionCompletion(error);
     }];
@@ -168,7 +169,6 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
     if (error) {
-        // TODO: Error handling
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             if (self.discoverServicesCompletion) self.discoverServicesCompletion(nil, error);
         }];
@@ -193,7 +193,6 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
     if (error) {
-        // TODO: Error handling
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             if (self.discoverCharacteristicsCompletion) self.discoverCharacteristicsCompletion(nil, error);
         }];
@@ -217,26 +216,22 @@ NSString *const SHBLECentralManagerErrorNotification = @"SHBLECentralManagerErro
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    if (characteristic.isNotifying) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    // Reading and subscribing both use this delegate method
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        if (characteristic.isNotifying) {
             if (error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:SHBLECentralManagerErrorNotification object:error];
             } else {
                 [[NSNotificationCenter defaultCenter] postNotificationName:SHBLECentralManagerValueDidChangeNotification object:characteristic.value];
             }
-        }];
-    } else {
-        // Read
-        // TODO: Error handling
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        } else {
             if (self.readValueCompletion) self.readValueCompletion(characteristic.value, error);
-        }];
-    }
+        }
+    }];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    // TODO: Error handling
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         if (self.writeValueCompletion) self.writeValueCompletion(error);
     }];
