@@ -66,7 +66,7 @@ NSString *const CharacteristicCellIdentifier = @"CharacteristicCellIdentifier";
     [super viewWillDisappear:animated];
     
     for (CBCharacteristic *characteristic in self.discoverCharacheristics) {
-        [self.maneger unsubscribeValueForCharacteric:characteristic];
+        [self.maneger unsubscribeValueForCharacteristic:characteristic];
     }
     
     [self.maneger disconnectPeripheral:self.maneger.activePeripheral completion:^(NSError *error) {

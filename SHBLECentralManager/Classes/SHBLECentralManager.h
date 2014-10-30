@@ -10,8 +10,7 @@
  *  This class wraps a central manager of the Core Bluetooth framework.
  *  All callback functions will be execute on the main queue.
  *
- *  If you subscribe one characteristic, this class will post a notifictaion when the value changes.
- *  The object of this notification contains the value of the characteristic.
+ *  If you subscribe one characteristic, this class will post a notifictaion when the value changes. The object of this notification contains the value of the characteristic.
  *  If an error occurs, this class will post another notification and the object of this notification contains the error.
  */
 
@@ -26,8 +25,8 @@ typedef void (^SHBLECentralManagerConnectCompletion) (CBPeripheral *peripheral, 
 typedef void (^SHBLECentralManagerDisconnectCompletion) (NSError *error);
 typedef void (^SHBLECentralManagerDiscoverServicesCompletion) (NSArray *services, NSError *error);
 typedef void (^SHBLECentralManagerDiscoverCharacteristicsCompletion) (NSArray *characterisics, NSError *error);
-typedef void (^SHBLECentralManagerReadValueForCharacteristicCompletion) (NSData *value, NSError *error);
-typedef void (^SHBLECentralManagerWriteValueForCharacteristicCompletion) (NSError *error);
+typedef void (^SHBLECentralManagerReadValueCompletion) (NSData *value, NSError *error);
+typedef void (^SHBLECentralManagerWriteValueCompletion) (NSError *error);
 
 @interface SHBLECentralManager : NSObject
 
@@ -42,10 +41,10 @@ typedef void (^SHBLECentralManagerWriteValueForCharacteristicCompletion) (NSErro
 - (void)discoverServicesWithUUIDs:(NSArray *)serviceUUIDs completion:(SHBLECentralManagerDiscoverServicesCompletion)completion;
 - (void)discoverCharacteristicsWithUUIDs:(NSArray *)characteristicUUIDs forService:(CBService *)service completion:(SHBLECentralManagerDiscoverCharacteristicsCompletion)completion;
 
-- (void)readValueForCharacteristic:(CBCharacteristic *)characteristic completion:(SHBLECentralManagerReadValueForCharacteristicCompletion)completion;
-- (void)writeValue:(NSData *)value forCharacteristic:(CBCharacteristic *)characteristic completion:(SHBLECentralManagerWriteValueForCharacteristicCompletion)completion;
+- (void)readValueForCharacteristic:(CBCharacteristic *)characteristic completion:(SHBLECentralManagerReadValueCompletion)completion;
+- (void)writeValue:(NSData *)value forCharacteristic:(CBCharacteristic *)characteristic completion:(SHBLECentralManagerWriteValueCompletion)completion;
 
 - (void)subscribeValueForCharacteristic:(CBCharacteristic *)characteristic;
-- (void)unsubscribeValueForCharacteric:(CBCharacteristic *)characteristic;
+- (void)unsubscribeValueForCharacteristic:(CBCharacteristic *)characteristic;
 
 @end
